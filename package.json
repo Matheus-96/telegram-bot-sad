@@ -20,6 +20,7 @@
     "axios": "^0.24.0",
     "cheerio": "^1.0.0-rc.10",
     "dotenv": "^10.0.0",
+    "html-entities": "^2.3.2",
     "nodemailer": "^6.7.1",
     "telegraf": "^4.4.2"
   },
