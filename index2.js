@@ -28,17 +28,7 @@ bot.action('answerQuiz', async () => {
  * ##############################
  */
 
-bot.on('text', async (ctx, next) => {
-    if (metodos.GetLang()) {
-        metodos.Text_to_speech(ctx)
-    }
-    if(metodos.GetIsQuiz()){
-        console.log("Chegou aqui")
-        metodos.EvaluateQuiz(ctx)
-    }
-    next()
-    
-})
+
 
 bot.action('talk', ctx => {
     ctx.editMessageText("<b>text-to-speech</b>\n\nNesta mini aplicação você pode digitar um texto no idioma selecionado e eu leio o que você me falou!\n\nSelecione um idioma:", {
@@ -84,6 +74,7 @@ bot.action(/SCREEN(\d+)/, (ctx, next) => {
 })
 
 bot.command('start', async ctx => {
+    metodos.SetSelector("0")
     await metodos.ShowKeyboard(ctx)
 })
 
@@ -91,6 +82,18 @@ bot.command('sing', async ctx => {
     await ctx.replyWithAudio({ url: "https://cdn.jsdelivr.net/gh/Matheus-96/telegram-bot-sad@main/resources/gatoTheme.mp3", filename: "Gato theme" })
     await ctx.reply("🎶 They call me gato \nI have metal joints 🎵")
     await ctx.reply("Beat me up 🎶\n🎵 And earn 15 silver points!")
+})
+
+bot.on('text', async (ctx, next) => {
+    if (metodos.GetLang()) {
+        metodos.Text_to_speech(ctx)
+    }
+    if (metodos.GetIsQuiz()) {
+        console.log("Chegou aqui")
+        metodos.EvaluateQuiz(ctx)
+    }
+    next()
+
 })
 
 bot.launch()

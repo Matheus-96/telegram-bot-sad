@@ -6,6 +6,7 @@ let lang = ""      // Idioma selecionado no text-to-speech
 let isQuiz = false // Se o usuário está realizando quiz
 let quizIndex = 0  // Qual indice de mensagem para o quiz
 let quizObj  // Objeto que recebera o quiz da API
+let score = 0 //Pontuação do jogador no QUIZ
 let SELECTOR = '0' // Seletor de 'tela'
 
 function SetSelector(value) {
@@ -52,13 +53,20 @@ const Text_to_speech = async ctx => {
 
 const GetQuiz = async () => {
     quizIndex = 0
+    score = 0
     return await axios.get('https://opentdb.com/api.php?amount=5&category=15&difficulty=easy')
 }
 
 const EvaluateQuiz = async (ctx) => {
-    if (ctx.update.message.text == quizObj.data.results[quizIndex].correct_answer) await ctx.replyWithHTML("ACERTOU!!!")
-    quizIndex++
-    UserQuiz(ctx)
+    if (ctx.update.message.text == quizObj.data.results[quizIndex].correct_answer) score++
+    if(quizIndex < 4){
+        quizIndex++
+        UserQuiz(ctx)
+    } else {
+        SELECTOR = 1 
+        await ctx.reply(`Você acertou ${score} perguntas no quiz! ${score == 0 ? '🤡' : '🎉🥳' }`)
+        ShowKeyboard(ctx, "Obrigado por passar todo esse tempo aqui comigo 🤖")
+    }
 }
 
 const UserQuiz = async (ctx) => {
@@ -82,7 +90,7 @@ const UserQuiz = async (ctx) => {
         keyboard.reply_markup.keyboard[[0]].push({ 'text': decode(answerArray[index]) })
     }
     ctx.replyWithHTML(`
-    <b>Pergunta ${quizIndex}/5</b>
+    <b>Pergunta ${quizIndex+1}/5</b>
 
     ${(decode(quizObj.data.results[quizIndex].question))}`, keyboard)
 }
