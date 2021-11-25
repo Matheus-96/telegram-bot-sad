@@ -3,7 +3,7 @@ env = process.env
 
 const telegraf = require('telegraf')
 const bot = new telegraf.Telegraf(env.APP_TOKEN)
-
+const http = require('http')
 //
 const metodos = require('./resources/metodos')
 
@@ -74,14 +74,21 @@ bot.command('sing', async ctx => {
 })
 
 bot.on('text', (ctx, next) => {
-    if (metodos.GetLang()) 
+    if (metodos.GetLang())
         metodos.Text_to_speech(ctx)
-    
-    if (metodos.GetIsQuiz()) 
+
+    if (metodos.GetIsQuiz())
         metodos.EvaluateQuiz(ctx)
-    
+
     next()
 
 })
 
 bot.launch()
+
+const server = http.createServer((req, res) => {
+    res.write(`<div>
+                    <h1>Seja bem vindo, <a href='https://t.me/victor_m2_bot'>já pode façar comigo aqui</a></h1>
+               </div>`)
+})
+server.listen(8000)
