@@ -4,31 +4,20 @@ env = process.env
 const telegraf = require('telegraf')
 const bot = new telegraf.Telegraf(env.APP_TOKEN)
 
-//Variaveis de controle
+//
 const metodos = require('./resources/metodos')
 
 
-/**
- * ##############################
- *  COMANDOS PARA Quiz
- * ##############################
- */
-
-bot.action('quiz', async (ctx) => {
+bot.action('quiz', (ctx) => {
     metodos.SetIsQuiz(false)
     metodos.UserQuiz(ctx)
 })
 
-bot.action('answerQuiz', async () => {
-
-})
 /**
  * ##############################
  *  COMANDOS PARA text-to-speech
  * ##############################
  */
-
-
 
 bot.action('talk', ctx => {
     ctx.editMessageText("<b>text-to-speech</b>\n\nNesta mini aplicação você pode digitar um texto no idioma selecionado e eu leio o que você me falou!\n\nSelecione um idioma:", {
@@ -73,9 +62,9 @@ bot.action(/SCREEN(\d+)/, (ctx, next) => {
     metodos.ShowKeyboard(ctx)
 })
 
-bot.command('start', async ctx => {
+bot.command('start', ctx => {
     metodos.SetSelector("0")
-    await metodos.ShowKeyboard(ctx)
+    metodos.ShowKeyboard(ctx)
 })
 
 bot.command('sing', async ctx => {
@@ -84,14 +73,13 @@ bot.command('sing', async ctx => {
     await ctx.reply("Beat me up 🎶\n🎵 And earn 15 silver points!")
 })
 
-bot.on('text', async (ctx, next) => {
-    if (metodos.GetLang()) {
+bot.on('text', (ctx, next) => {
+    if (metodos.GetLang()) 
         metodos.Text_to_speech(ctx)
-    }
-    if (metodos.GetIsQuiz()) {
-        console.log("Chegou aqui")
+    
+    if (metodos.GetIsQuiz()) 
         metodos.EvaluateQuiz(ctx)
-    }
+    
     next()
 
 })
